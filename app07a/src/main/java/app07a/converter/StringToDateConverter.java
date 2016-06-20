@@ -1,25 +1,25 @@
-package app06a.formatter;
+package app07a.converter;
 
-import org.springframework.format.Formatter;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.core.convert.converter.Converter;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 
 /**
  * Created by jecyhw on 2016/6/13.
  */
-public class DateFormatter implements Formatter<Date>{
+public class StringToDateConverter implements Converter<String, Date>{
+    private static final Log logger = LogFactory.getLog(StringToDateConverter.class);
     private String datePattern;
-    private SimpleDateFormat dateFormat;
 
-    public DateFormatter(String datePattern) {
+    public StringToDateConverter(String datePattern) {
         this.datePattern = datePattern;
-        dateFormat = new SimpleDateFormat(datePattern);
-        dateFormat.setLenient(false);
     }
-    public Date parse(String s, Locale locale) throws ParseException {
+
+    public Date convert(String s) {
         try {
             SimpleDateFormat dateFormat = new SimpleDateFormat(datePattern);
             dateFormat.setLenient(false);
@@ -27,9 +27,5 @@ public class DateFormatter implements Formatter<Date>{
         } catch (ParseException e) {
             throw new IllegalArgumentException("invalid date format. Please use this pattern\"" + datePattern + "\"");
         }
-    }
-
-    public String print(Date date, Locale locale) {
-        return dateFormat.format(date);
     }
 }
